@@ -35,11 +35,12 @@ const startCall = async () => {
 
     client.on(`command-channel-message`, (payload) => {
         console.log(payload)
-        console.log(`Command from ${payload.senderName} is ${payload.text}`)
 
-        if (payload.text.indexOf('-') > 0) {
-        
-            const numbers = payload.text.split('-')
+        const actualData = payload.text.replaceAll('"', '')
+        console.log(`Command from ${payload.senderName} is ${actualData}`)
+
+        if (actualData.indexOf('-') > 0) {
+            const numbers = actualData.split('-')
 
             cursorX.value = Number(numbers[0])
             cursorY.value = Number(numbers[1])
@@ -108,7 +109,7 @@ const toggleAudio = async () => {
 };
 
 function handleMouse(event: MouseEvent) {
-    if (++sendCounter >= 50) {
+    if (++sendCounter >= 5) {
         sendCounter = 0
 
         sendCustomData(event.screenX + "-" + event.screenY)
@@ -123,9 +124,8 @@ function handleMouse(event: MouseEvent) {
             <video-player-container ref="videoContainer"></video-player-container>
 
             <div class="custom-cursor" :style="{ top: cursorY + 'px', left: cursorX + 'px' }"></div>
-
         </div>
-
+       
         <div v-if="!inSession">
             <button @click="startCall">
                 Join
