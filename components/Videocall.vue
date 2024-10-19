@@ -28,11 +28,11 @@ const startCall = async () => {
     audioMuted.value = mediaStream.isAudioMuted();
     videoMuted.value = !mediaStream.isCapturingVideo();
 
-    const commandClient = client.getCommandClient()
+    client.on(`command-channel-message`, (payload) => {
+        console.log(payload)
+        console.log(`Command from ${payload.senderName} is ${payload.text}`);
+    });
 
-    commandClient.on('command-received', (payload) => {
-        console.log("Command received:", payload);
-    })
 }
 
 const renderVideo = async (event: { action: "Start" | "Stop"; userId: number; }) => {
@@ -93,11 +93,16 @@ const toggleAudio = async () => {
     }
     audioMuted.value = mediaStream.isAudioMuted();
 };
+
+function handleMouse(event: Event) {
+    console.log(event)
+
+}
 </script>
 
 <template>
     <div>
-        <div v-show="inSession">
+        <div @mousemove="handleMouse" class="vid-container" v-show="inSession">
             <video-player-container ref="videoContainer"></video-player-container>
         </div>
 
@@ -115,7 +120,7 @@ const toggleAudio = async () => {
                 <p v-if="audioMuted">Unmute Audio</p>
                 <p v-else>Mute Audio</p>
             </button>
-            <button @click="sendCustomData('Bla Blas')">
+            <button @click="sendCustomData('Bla Bla...')">
                 Send Data
             </button>
             <button @click="leaveCall">
@@ -124,3 +129,9 @@ const toggleAudio = async () => {
         </div>
     </div>
 </template>
+
+<style scoped>
+    .vid-container {
+        width: 40%;
+    }
+</style>
