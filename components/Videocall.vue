@@ -12,6 +12,11 @@ const inSession = ref(false);
 const audioMuted = ref(false);
 const videoMuted = ref(false);
 
+const cursorX = ref(0)
+const cursorY = ref(0)
+
+let sendCounter = 0
+
 onMounted(async () => {
     await client.init("en-US", "Global", { patchJsMedia: true });
 })
@@ -30,8 +35,16 @@ const startCall = async () => {
 
     client.on(`command-channel-message`, (payload) => {
         console.log(payload)
-        console.log(`Command from ${payload.senderName} is ${payload.text}`);
-    });
+        console.log(`Command from ${payload.senderName} is ${payload.text}`)
+
+        if (payload.text.indexOf('-') > 0) {
+        
+            const numbers = payload.text.split('-')
+
+            cursorX.value = Number(numbers[0])
+            cursorY.value = Number(numbers[1])
+        }    
+    })
 
 }
 
@@ -94,16 +107,23 @@ const toggleAudio = async () => {
     audioMuted.value = mediaStream.isAudioMuted();
 };
 
-function handleMouse(event: Event) {
-    console.log(event)
+function handleMouse(event: MouseEvent) {
+    if (++sendCounter >= 50) {
+        sendCounter = 0
 
+        sendCustomData(event.screenX + "-" + event.screenY)
+    }
 }
+
 </script>
 
 <template>
     <div>
         <div @mousemove="handleMouse" class="vid-container" v-show="inSession">
             <video-player-container ref="videoContainer"></video-player-container>
+
+            <div class="custom-cursor" :style="{ top: cursorY + 'px', left: cursorX + 'px' }"></div>
+
         </div>
 
         <div v-if="!inSession">
@@ -131,7 +151,18 @@ function handleMouse(event: Event) {
 </template>
 
 <style scoped>
-    .vid-container {
-        width: 40%;
-    }
+.vid-container {
+    width: 40%;
+    position: relative;
+}
+
+.custom-cursor {
+    width: 20px;
+    height: 20px;
+    background-color: yellowgreen;
+    border-radius: 50%;
+    position: absolute;
+    pointer-events: none;
+}
+
 </style>
