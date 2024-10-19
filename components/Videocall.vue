@@ -112,7 +112,7 @@ function handleMouse(event: MouseEvent) {
     if (++sendCounter >= 5) {
         sendCounter = 0
 
-        sendCustomData(event.screenX + "-" + event.screenY)
+        sendCustomData(event.clientX + "-" + event.clientY)
     }
 }
 
@@ -152,7 +152,7 @@ function handleMouse(event: MouseEvent) {
 
 <style scoped>
 .vid-container {
-    width: 40%;
+    width: 40rem;
     position: relative;
 }
 
