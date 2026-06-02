@@ -4,6 +4,7 @@ export default defineNuxtConfig({
   
   devtools: { enabled: true },
   
+  // Server-side runtime config sourced from environment variables (Zoom Video SDK credentials)
   runtimeConfig: {
     ZoomVideoSDKKey: process.env.ZOOM_SDK_KEY,
     ZoomVideoSDKSecret: process.env.ZOOM_SDK_SECRET
