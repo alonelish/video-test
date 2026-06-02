@@ -11,6 +11,7 @@ export default defineNuxtConfig({
     ZoomVideoSDKSecret: process.env.ZOOM_SDK_SECRET
   },
 
+  // Vue compiler configuration
   vue: {
     compilerOptions: {
       // Treat <video-player-container> as a native element so Vue skips component resolution
