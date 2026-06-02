@@ -12,6 +12,7 @@ export default defineNuxtConfig({
 
   vue: {
     compilerOptions: {
+      // Treat <video-player-container> as a native element so Vue skips component resolution
       isCustomElement: (tag) => tag === 'video-player-container'
     }
   }
